@@ -1,0 +1,17 @@
+services:
+  casino-api:
+    build: ./casino-api
+    ports: 
+      - 3001:8000
+    volumes:
+      - .:/code
+
+  postgresql-data:
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - 5433:5432
+    volumes:
+      - ./postgresql-data:/var/lib/postgresql/data
