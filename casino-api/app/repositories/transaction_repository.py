@@ -2,7 +2,6 @@ from sqlalchemy.orm import Session
 from app.models.transaction_model import Transaction
 from app.schemas.transaction_schema import TransactionCreate
 from app.exceptions.transaction_not_found_exception import TransactionNotFoundException
-import logging
 
 
 class TransactionRepository:

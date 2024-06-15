@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 from app.services.player_service import PlayerService
 from app.exceptions.player_not_found_exception import PlayerNotFoundException
 from app.schemas.player_schema import PlayerResponse, PlayerCreate
-from typing import List
 
 @pytest.fixture
 def mock_player_repository():

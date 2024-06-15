@@ -4,7 +4,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.db import Base, get_db_session
 from app.main import app
-from app.models.player_model import Player
 import logging
 
 
