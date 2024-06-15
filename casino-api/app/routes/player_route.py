@@ -16,12 +16,12 @@ def get_player_service(db: Session = Depends(get_db_session)) -> PlayerService:
 
 player_service = get_player_service()
 
-@router.post("/", response_model=PlayerResponse, status_code=201)
+@router.post("", response_model=PlayerResponse, status_code=201)
 def create_player(player: PlayerCreate, db: Session = Depends(get_db_session)):
     return player_service.create_player(db=db, player=player)
 
 
-@router.get("/", response_model=PlayersResponse)
+@router.get("", response_model=PlayersResponse)
 def read_players(db: Session = Depends(get_db_session)):
     players = player_service.get_players(db=db)
     return PlayersResponse(players=players)
