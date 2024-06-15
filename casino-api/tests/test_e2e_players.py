@@ -38,10 +38,10 @@ def test_create_player(test_db):
     assert "id" in data
 
 def test_read_players(test_db):
-    client.post("/players/", json={"name": "Maria da Silva", "balance": 1000})
-    client.post("/players/", json={"name": "Pedro da Silva", "balance": 2000})
+    client.post("/players", json={"name": "Maria da Silva", "balance": 1000})
+    client.post("/players", json={"name": "Pedro da Silva", "balance": 2000})
     
-    response = client.get("/players/")
+    response = client.get("/players")
     assert response.status_code == 200
     data = response.json()
     assert "players" in data
@@ -50,7 +50,7 @@ def test_read_players(test_db):
     assert data["players"][1]["name"] == "Pedro da Silva"
 
 def test_read_player(test_db):
-    client.post("/players/", json={"name": "Maria da Silva", "balance": 1000})
+    client.post("/players", json={"name": "Maria da Silva", "balance": 1000})
     response = client.get("/players/1")
     assert response.status_code == 200
     data = response.json()
@@ -59,7 +59,7 @@ def test_read_player(test_db):
     assert data["id"] == 1
 
 def test_delete_player(test_db):
-    client.post("/players/", json={"name": "Maria da Silva", "balance": 1000})
+    client.post("/players", json={"name": "Maria da Silva", "balance": 1000})
     response = client.delete("/players/1")
     assert response.status_code == 200
     data = response.json()
