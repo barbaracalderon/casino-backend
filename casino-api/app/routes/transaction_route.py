@@ -30,7 +30,7 @@ def get_player_service(db: Session = Depends(get_db_session)) -> PlayerService:
 transaction_service = get_transaction_service()
 player_service = get_player_service()
 
-@router.post("/bet", response_model=TransactionBalanceResponse, status_code=201)
+@router.post("/bet", response_model=TransactionBalanceResponse, status_code=200)
 def create_transaction(transaction: TransactionCreate, db: Session = Depends(get_db_session)):
     transaction_service = get_transaction_service(db)
     player_service = get_player_service(db)
@@ -71,8 +71,6 @@ def create_transaction(transaction: TransactionCreate, db: Session = Depends(get
         raise HTTPException(status_code=e.status_code, detail=str(e.detail))
 
 
-
-
 @router.get("", response_model=TransactionsResponse)
 def read_transactions(db: Session = Depends(get_db_session)):
     transactions = transaction_service.get_transactions(db=db)
@@ -83,11 +81,9 @@ def read_transactions(db: Session = Depends(get_db_session)):
 def get_transaction_by_uuid(txn_uuid: str, db: Session = Depends(get_db_session)):
     try:
         transaction = transaction_service.get_transaction_by_uuid(db=db, txn_uuid=txn_uuid)
-        if not transaction:
-            raise TransactionNotFoundException(status_code=e.status_code, detail=str(e))
         return transaction
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except TransactionNotFoundException as e:
+        raise HTTPException(status_code=e.status_code, detail=str(e.detail))
 
 
 @router.delete("/{transaction_id}", response_model=TransactionResponse)
