@@ -33,7 +33,6 @@ class TransactionService:
             value_bet=transaction.value_bet) for transaction in transactions]
         
 
-
     def delete_transaction(self, db: Session, transaction_id: int) -> TransactionResponse:
         transaction = self.transaction_repository.delete_transaction(db=db, transaction_id=transaction_id)
         if not transaction:
@@ -42,6 +41,7 @@ class TransactionService:
 
 
     def get_transaction_by_uuid(self, db: Session, txn_uuid: str) -> Transaction:
-        return self.transaction_repository.get_transaction_by_uuid(db, txn_uuid)
+        transaction = self.transaction_repository.get_transaction_by_uuid(db=db, txn_uuid=txn_uuid)
+        return transaction
 
 
