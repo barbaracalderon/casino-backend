@@ -15,3 +15,13 @@ class PlayersResponse(BaseModel):
 
     class Config:
         orm_mode = True
+
+class PlayerUpdateRequest(BaseModel):
+    name: str
+    balance: float
+
+
+class PlayerUpdateResponse(BaseModel):
+    id: int
+    name: str
+    balance: float
