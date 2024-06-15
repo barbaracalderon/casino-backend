@@ -9,5 +9,6 @@ class Transaction(Base):
     txn_uuid = Column(String, unique=True, index=True, nullable=False)
     player_id = Column(Integer, ForeignKey("players.id"), nullable=False)
     value_bet = Column(Float, nullable=False)
+    value_win = Column(Float, nullable=False)
 
     player = relationship("Player", back_populates="transaction")

@@ -27,3 +27,7 @@ class TransactionsResponse(BaseModel):
     class Config:
         orm_mode = True
 
+class TransactionWin(BaseModel):
+    player_id: int
+    value_win: float
+    txn_uuid: str
