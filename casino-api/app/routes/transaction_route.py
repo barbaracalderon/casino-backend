@@ -5,9 +5,10 @@ from app.schemas.transaction_schema import (
     TransactionCreate, 
     TransactionResponse, 
     TransactionsResponse, 
-    TransactionBalanceResponse
+    TransactionBalanceResponse,
+    TransactionWin
 )
-from app.schemas.player_schema import PlayerUpdateRequest, PlayerUpdateResponse
+from app.schemas.player_schema import PlayerUpdateRequest
 from app.services.transaction_service import TransactionService
 from app.repositories.transaction_repository import TransactionRepository
 from app.repositories.player_repository import PlayerRepository
@@ -94,3 +95,41 @@ def delete_transaction(transaction_id: int, db: Session = Depends(get_db_session
     except TransactionNotFoundException as e:
         raise HTTPException(status_code=e.status_code, detail=str(e.detail))
         
+
+@router.post("/win", response_model=TransactionBalanceResponse, status_code=200)
+def win_transaction(transaction: TransactionWin, db: Session = Depends(get_db_session)):
+    transaction_service = get_transaction_service(db)
+    player_service = get_player_service(db)
+
+    existing_transaction = transaction_service.get_transaction_by_uuid(db, transaction.txn_uuid)
+    existing_player = player_service.get_player(db=db, player_id=transaction.player_id)
+
+    if existing_transaction:
+        return TransactionBalanceResponse(
+            id=existing_transaction.id,
+            player_id=existing_player.id,
+            balance=existing_player.balance,
+            txn_uuid=existing_transaction.txn_uuid
+        )
+
+    try:
+        db_player = player_service.get_player(db, transaction.player_id)
+
+        db_player.balance += transaction.value_win
+
+        player_update = PlayerUpdateRequest(name=db_player.name, balance=db_player.balance)
+        player_id = db_player.id
+
+        player_service.update_player(db=db, player_id=player_id, player=player_update)
+
+        db_transaction = transaction_service.create_transaction(db=db, transaction=transaction)
+
+        return TransactionBalanceResponse(
+            id=db_transaction.id,
+            player_id=player_id,
+            balance=player_update.balance,
+            txn_uuid=db_transaction.txn_uuid
+        )
+
+    except PlayerNotFoundException as e:
+        raise HTTPException(status_code=e.status_code, detail=str(e.detail))
