@@ -68,3 +68,26 @@ def test_delete_transaction(test_db):
     response_delete = client.delete(f"/transactions/{transaction_id}")
     assert response_delete.status_code == 200
 
+def test_win_transaction(test_db):
+    player_id = create_player("Alice", 1000.0)
+
+    response = client.post("/transactions/win", json={"player_id": player_id, "value_win": 500.0, "txn_uuid": "uuid-win-1"})
+    assert response.status_code == 200
+    data = response.json()
+    assert data["player_id"] == player_id
+    assert data["balance"] == 1500.0
+    assert data["txn_uuid"] == "uuid-win-1"
+
+    response = client.post("/transactions/win", json={"player_id": player_id, "value_win": 500.0, "txn_uuid": "uuid-win-1"})
+    assert response.status_code == 200
+    data = response.json()
+    assert data["player_id"] == player_id
+    assert data["balance"] == 1500.0
+    assert data["txn_uuid"] == "uuid-win-1"
+
+    response = client.post("/transactions/win", json={"player_id": player_id, "value_win": 200.0, "txn_uuid": "uuid-win-2"})
+    assert response.status_code == 200
+    data = response.json()
+    assert data["player_id"] == player_id
+    assert data["balance"] == 1700.0
+    assert data["txn_uuid"] == "uuid-win-2"
