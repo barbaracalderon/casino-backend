@@ -1,12 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List, Dict
+from typing import List, Dict, Union
 from app.schemas.transaction_schema import (
     TransactionCreate, 
     TransactionResponse, 
     TransactionsResponse, 
     TransactionBalanceResponse,
-    TransactionWin
+    TransactionWin,
+    TransactionCancelled,
+    TransactionBalanceUpdate
 )
 from app.schemas.player_schema import PlayerUpdateRequest
 from app.services.transaction_service import TransactionService
@@ -82,9 +84,20 @@ def read_transactions(db: Session = Depends(get_db_session)):
 def get_transaction_by_uuid(txn_uuid: str, db: Session = Depends(get_db_session)):
     try:
         transaction = transaction_service.get_transaction_by_uuid(db=db, txn_uuid=txn_uuid)
-        return transaction
+        if transaction is None:
+            raise TransactionNotFoundException(txn_uuid=txn_uuid)
+        
+        return TransactionResponse(
+            id=transaction.id,
+            txn_uuid=transaction.txn_uuid,
+            player_id=transaction.player_id,
+            value_bet=transaction.value_bet,
+            value_win=transaction.value_win
+        )
     except TransactionNotFoundException as e:
-        raise HTTPException(status_code=e.status_code, detail=str(e.detail))
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
 @router.delete("/{transaction_id}", response_model=TransactionResponse)
@@ -133,3 +146,4 @@ def win_transaction(transaction: TransactionWin, db: Session = Depends(get_db_se
 
     except PlayerNotFoundException as e:
         raise HTTPException(status_code=e.status_code, detail=str(e.detail))
+    
