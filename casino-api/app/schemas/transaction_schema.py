@@ -1,5 +1,6 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
+
 
 class TransactionCreate(BaseModel):
     player_id: int
@@ -16,7 +17,8 @@ class TransactionResponse(BaseModel):
     id: int
     txn_uuid: str
     player_id: int
-    value_bet: float
+    value_bet: Optional[float]
+    value_win: Optional[float]
 
     class Config:
         orm_mode = True
@@ -31,3 +33,13 @@ class TransactionWin(BaseModel):
     player_id: int
     value_win: float
     txn_uuid: str
+
+class TransactionCancelled(BaseModel):
+    txn_uuid: str
+    value_bet: float
+    player_id: int
+
+
+class TransactionBalanceUpdate(BaseModel):
+    player_id: int
+    balance: float

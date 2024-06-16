@@ -25,3 +25,4 @@ class PlayerUpdateResponse(BaseModel):
     id: int
     name: str
     balance: float
+
