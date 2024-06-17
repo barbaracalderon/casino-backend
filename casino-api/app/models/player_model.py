@@ -9,4 +9,4 @@ class Player(Base):
     name = Column(String, index=True)
     balance = Column(Float, default=0.0)
     
-    transaction = relationship("Transaction", back_populates="player")
+    transactions = relationship("Transaction", back_populates="player")
