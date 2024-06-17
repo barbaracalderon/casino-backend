@@ -40,6 +40,10 @@ player_service = get_player_service()
 
 @router.post("/bet", response_model=TransactionBalanceResponse, status_code=200)
 def create_transaction(transaction: TransactionCreate, db: Session = Depends(get_db_session)):
+    if transaction.value_bet < 0:
+        raise InvalidBetException(value_bet=transaction.value_bet)
+
+
     transaction_service = get_transaction_service(db)
     player_service = get_player_service(db)
 
@@ -72,6 +76,8 @@ def create_transaction(transaction: TransactionCreate, db: Session = Depends(get
             balance=player_update.balance,
             txn_uuid=db_transaction.txn_uuid
         )
+    except InvalidBetException as e:
+        raise HTTPException(status_code=e.status_code, detail=str(e.detail))
     except PlayerNotFoundException as e:
         raise HTTPException(status_code=e.status_code, detail=str(e.detail))
 
