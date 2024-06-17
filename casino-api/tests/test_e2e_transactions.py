@@ -129,8 +129,6 @@ def test_rollback_transaction(test_db):
     assert response_bet.status_code == 200
 
     response_rollback = client.post("/transactions/rollback", json={"txn_uuid": txn_uuid, "value_bet": 100.0, "player_id": player_id})
-    logging.critical(response_rollback.status_code)
-    logging.critical(response_rollback.json())
     assert response_rollback.status_code == 200
     data = response_rollback.json()
     assert data["player_id"] == player_id

@@ -34,7 +34,7 @@ def test_db():
     ("Alice", 3000),
 ])
 def test_create_multiple_players(test_db, name, balance):
-    response = client.post("/players/", json={"name": name, "balance": balance})
+    response = client.post("/players", json={"name": name, "balance": balance})
     assert response.status_code == 201
     player_id = response.json()["id"]
 
@@ -45,7 +45,7 @@ def test_create_multiple_players(test_db, name, balance):
 
 
 def test_integration_player_lifecycle(test_db):
-    response = client.post("/players/", json={"name": "John Doe", "balance": 1000})
+    response = client.post("/players", json={"name": "John Doe", "balance": 1000})
     assert response.status_code == 201
     player_data = response.json()
     assert "id" in player_data
@@ -69,7 +69,7 @@ def test_integration_player_lifecycle(test_db):
 
 
 def test_update_player(test_db):
-    response = client.post("/players/", json={"name": "John Doe", "balance": 1000})
+    response = client.post("/players", json={"name": "John Doe", "balance": 1000})
     assert response.status_code == 201
     player_id = response.json()["id"]
 
@@ -85,7 +85,7 @@ def test_update_player(test_db):
 
 
 def test_create_player_invalid_data(test_db):
-    response = client.post("/players/", json={"name": "", "balance": -100})
+    response = client.post("/players", json={"name": "", "balance": -100})
     assert response.status_code == 422
     assert response.json()["detail"] == "The balance value of -100.0 is not valid. Only positive numbers or zero."
 
@@ -103,13 +103,13 @@ def test_delete_non_existent_player(test_db):
 
 
 def test_get_all_players(test_db):
-    response = client.post("/players/", json={"name": "John Doe", "balance": 1000})
+    response = client.post("/players", json={"name": "John Doe", "balance": 1000})
     assert response.status_code == 201
 
-    response = client.post("/players/", json={"name": "Jane Doe", "balance": 2000})
+    response = client.post("/players", json={"name": "Jane Doe", "balance": 2000})
     assert response.status_code == 201
 
-    response = client.get("/players/")
+    response = client.get("/players")
     assert response.status_code == 200
     data = response.json()
     assert len(data["players"]) == 2

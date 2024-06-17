@@ -87,3 +87,10 @@ def test_read_transactions_integration(test_db):
         assert len(data["transactions"]) == 2
         assert data["transactions"][0]["value_bet"] == 100.0
         assert data["transactions"][1]["value_bet"] == 200.0
+
+
+def test_rollback_transaction_not_found(test_db):
+    with TestingSessionLocal() as db:
+        response = client.post("/transactions/rollback", json={"txn_uuid": "notfound123", "value_bet": 200.0, "player_id": 1})
+        assert response.status_code == 404
+        assert "Transaction not found, but stored with id:" in response.json()["detail"]
