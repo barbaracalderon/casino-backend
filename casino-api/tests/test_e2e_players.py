@@ -68,3 +68,24 @@ def test_delete_player(test_db):
 
     response = client.get("/players/1")
     assert response.status_code == 404
+
+def test_create_player_invalid_data(test_db):
+    response = client.post("/players", json={"name": "", "balance": -100})
+    assert response.status_code == 422
+
+def test_read_nonexistent_player(test_db):
+    response = client.get("/players/999")
+    assert response.status_code == 404
+
+def test_delete_nonexistent_player(test_db):
+    response = client.delete("/players/999")
+    assert response.status_code == 404
+
+def test_update_player(test_db):
+    client.post("/players", json={"name": "Maria da Silva", "balance": 1000})
+    response = client.put("/players/1", json={"name": "Maria da Silva", "balance": 1500})
+    assert response.status_code == 200
+    data = response.json()
+    assert data["name"] == "Maria da Silva"
+    assert data["balance"] == 1500
+
