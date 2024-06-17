@@ -13,6 +13,7 @@ def get_player_service(db: Session = Depends(get_db_session)) -> PlayerService:
 
 player_service = get_player_service()
 
+
 @router.get("", response_model=PlayerResponse, tags=["balance"])
 def get_balance(player: int = Query(..., description="Player ID")):
     db = next(get_db_session())

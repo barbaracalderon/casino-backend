@@ -6,6 +6,7 @@ import logging
 
 
 class PlayerRepository:
+    
     def create_player(self, db: Session, player: PlayerCreate) -> Player:
         db_player = Player(**player.dict())
         db.add(db_player)

@@ -12,6 +12,7 @@ from typing import List
 
 
 class PlayerService:
+
     def __init__(self, player_repository: PlayerRepository):
         self.player_repository = player_repository
 
@@ -45,9 +46,3 @@ class PlayerService:
 
         updated_player = self.player_repository.update_player(db=db, player_id=player_id, player=player)
         return updated_player
-
-
-    def log_transaction(self, db: Session, player_id: int, balance: float, txn_uuid: UUID4) -> None:
-        player = self.player_repository.get_player(db=db, player_id=player_id)
-        player.balance = balance
-        self.player_repository.update_player(db=db, player=player)
