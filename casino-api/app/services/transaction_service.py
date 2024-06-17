@@ -50,3 +50,8 @@ class TransactionService:
     def mark_transaction_rolled_back(self, db: Session, txn_uuid: str) -> Transaction:
         return self.transaction_repository.mark_transaction_rolled_back(db=db, txn_uuid=txn_uuid)
     
+    def create_transaction_marked_rolledback(self, db: Session, transaction: str) -> Transaction:
+        return self.transaction_repository.create_transaction_marked_rolledback(db=db, transaction=transaction)
+
+
+    

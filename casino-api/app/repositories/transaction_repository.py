@@ -49,3 +49,16 @@ class TransactionRepository:
             db.rollback()
             raise e
         return db_transaction
+    
+    def create_transaction_marked_rolledback(self, db: Session, transaction: Transaction) -> Transaction:
+        db_transaction = Transaction(**transaction.dict())
+        try:
+            db.commit()
+            db.add(db_transaction)
+            db.commit()
+            db.refresh(db_transaction)
+        except Exception as e:
+            logging.error(f"Failed to set 'rolled_back' status to txn_uuid: {transaction.txn_uuid}")
+            db.rollback()
+            raise e
+        return db_transaction

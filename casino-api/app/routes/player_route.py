@@ -5,7 +5,13 @@ from app.db import get_db_session
 from app.services.player_service import PlayerService
 from app.schemas.player_schema import PlayerCreate
 from app.exceptions.player_not_found_exception import PlayerNotFoundException
-from app.schemas.player_schema import PlayerResponse, PlayersResponse, PlayerUpdateResponse, PlayerUpdateRequest
+from app.exceptions.invalid_balance_exception import InvalidBalanceException
+from app.schemas.player_schema import (
+    PlayerResponse, 
+    PlayersResponse, 
+    PlayerUpdateResponse, 
+    PlayerUpdateRequest
+)
 from app.repositories.player_repository import PlayerRepository
 
 
@@ -19,7 +25,12 @@ player_service = get_player_service()
 
 @router.post("", response_model=PlayerResponse, status_code=201)
 def create_player(player: PlayerCreate, db: Session = Depends(get_db_session)):
-    return player_service.create_player(db=db, player=player)
+    try:
+        if player.balance < 0:
+            raise InvalidBalanceException(balance=player.balance)
+        return player_service.create_player(db=db, player=player)
+    except InvalidBalanceException as e:
+        raise HTTPException(status_code=e.status_code, detail=(str(e.detail)))
 
 
 @router.get("", response_model=PlayersResponse)

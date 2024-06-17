@@ -91,3 +91,45 @@ def test_win_transaction(test_db):
     assert data["player_id"] == player_id
     assert data["balance"] == 1700.0
     assert data["txn_uuid"] == "uuid-win-2"
+
+def test_insufficient_balance(test_db):
+    player_id = create_player("Alice", 50.0)
+    response = client.post("/transactions/bet", json={"player_id": player_id, "value_bet": 100.0, "txn_uuid": "insufficient-balance"})
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Insufficient balance for this operation."
+
+def test_negative_bet_value(test_db):
+    player_id = create_player("Alice", 1000.0)
+    response = client.post("/transactions/bet", json={"player_id": player_id, "value_bet": -100.0, "txn_uuid": "negative-bet"})
+    assert response.status_code == 422
+    assert response.json()["detail"] == "Bet value must be positive, not -100.0."
+
+def test_duplicate_transaction_uuid(test_db):
+    player_id = create_player("Alice", 1000.0)
+    txn_uuid = "duplicate-uuid"
+    response1 = client.post("/transactions/bet", json={"player_id": player_id, "value_bet": 100.0, "txn_uuid": txn_uuid})
+    assert response1.status_code == 200
+
+    response2 = client.post("/transactions/bet", json={"player_id": player_id, "value_bet": 200.0, "txn_uuid": txn_uuid})
+    assert response2.status_code == 200
+    data = response2.json()
+    assert data["balance"] == 900.0
+    assert data["txn_uuid"] == txn_uuid
+
+def test_negative_win_value(test_db):
+    player_id = create_player("Alice", 1000.0)
+    response = client.post("/transactions/win", json={"player_id": player_id, "value_win": -500.0, "txn_uuid": "negative-win"})
+    assert response.status_code == 422
+    assert response.json()["detail"] == "Win value must be positive, not -500.0."
+
+def test_rollback_transaction(test_db):
+    player_id = create_player("Alice", 1000.0)
+    txn_uuid = "rollback-uuid"
+    response_bet = client.post("/transactions/bet", json={"player_id": player_id, "value_bet": 100.0, "txn_uuid": txn_uuid})
+    assert response_bet.status_code == 200
+
+    response_rollback = client.post("/transactions/rollback", json={"txn_uuid": txn_uuid, "value_bet": 100.0, "player_id": player_id})
+    assert response_rollback.status_code == 200
+    data = response_rollback.json()
+    assert data["player_id"] == player_id
+    assert data["balance"] == 1000.0

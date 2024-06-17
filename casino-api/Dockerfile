@@ -14,7 +14,6 @@ ENV PYTHONUNBUFFERED=1 \
 
 ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
 
-# Stage 2: Builder setup
 FROM python-base as builder-base
 
 RUN apt-get update \
@@ -26,25 +25,20 @@ WORKDIR /code
 
 RUN rm -rf .venv
 
-# Install Poetry
 RUN curl -sSL https://install.python-poetry.org | python3 -
 
-# Ensure Poetry is in the PATH
 RUN ln -s $HOME/.local/bin/poetry /usr/bin/poetry
 
 WORKDIR $PYSETUP_PATH
 
 COPY pyproject.toml poetry.lock ./
 
-# Install dependencies without creating the project virtual environment
 RUN poetry install --no-root
 
 COPY . .
 
 WORKDIR /code/casino-api
 
-# Expose the port the app runs on
 EXPOSE 8000
 
-# Command to run the application
 CMD ["poetry", "run", "fastapi", "run", "app/main.py", "--host", "0.0.0.0", "--port", "8000", "--reload"]
