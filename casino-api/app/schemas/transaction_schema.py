@@ -36,9 +36,8 @@ class TransactionWin(BaseModel):
 
 class TransactionCancelled(BaseModel):
     txn_uuid: str
-    value_bet: float
     player_id: int
-
+    value_bet: float
 
 class TransactionBalanceUpdate(BaseModel):
     player_id: int

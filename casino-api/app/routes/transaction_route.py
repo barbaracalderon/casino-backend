@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List, Dict, Union
+from typing import List, Dict
 from app.schemas.transaction_schema import (
     TransactionCreate, 
     TransactionResponse, 
@@ -18,7 +18,10 @@ from app.services.player_service import PlayerService
 from app.db import get_db_session
 from app.exceptions.transaction_not_found_exception import TransactionNotFoundException
 from app.exceptions.player_not_found_exception import PlayerNotFoundException
+from app.exceptions.invalid_bet_exception import InvalidBetException
+from app.exceptions.already_cancelled_exception import AlreadyCancelledException
 from fastapi import HTTPException
+import logging
 
 
 router = APIRouter()
@@ -29,6 +32,7 @@ def get_transaction_service(db: Session = Depends(get_db_session)) -> Transactio
 
 def get_player_service(db: Session = Depends(get_db_session)) -> PlayerService:
     return PlayerService(PlayerRepository())
+
 
 transaction_service = get_transaction_service()
 player_service = get_player_service()
@@ -147,3 +151,50 @@ def win_transaction(transaction: TransactionWin, db: Session = Depends(get_db_se
     except PlayerNotFoundException as e:
         raise HTTPException(status_code=e.status_code, detail=str(e.detail))
     
+
+@router.post("/rollback", response_model=TransactionBalanceUpdate, status_code=200)
+def rollback_transaction(transaction: TransactionCancelled, db: Session = Depends(get_db_session)):
+    transaction_service = get_transaction_service(db)
+    player_service = get_player_service(db)
+
+    try:
+        if transaction.value_bet == 0.0:
+            raise InvalidBetException(value_bet=transaction.value_bet)
+
+        existing_transaction = transaction_service.get_transaction_by_uuid(db, transaction.txn_uuid)
+        if existing_transaction is None:
+            raise TransactionNotFoundException(txn_uuid=transaction.txn_uuid)
+
+        if existing_transaction.rolled_back is True:
+            raise AlreadyCancelledException(txn_uuid=transaction.txn_uuid)
+        
+
+        db_player = player_service.get_player(db, existing_transaction.player_id)
+        db_player.balance += existing_transaction.value_bet
+
+        player_update = PlayerUpdateRequest(name=db_player.name, balance=db_player.balance)
+        player_id = db_player.id
+
+        player_service.update_player(db=db, player_id=player_id, player=player_update)
+
+        transaction_service.mark_transaction_rolled_back(db, transaction.txn_uuid)
+
+        return TransactionBalanceUpdate(
+            player_id=player_id,
+            balance=db_player.balance,
+        )
+
+    except InvalidBetException as e:
+        raise HTTPException(status_code=e.status_code, detail=str(e.detail))
+    
+    except TransactionNotFoundException as e:
+        new_transaction = transaction_service.create_transaction_marked_rolledback(db=db, transaction=transaction)
+        raise HTTPException(status_code=e.status_code, detail=f"Transaction not found, but stored with id: {new_transaction.id}")
+    
+    except AlreadyCancelledException as e:
+        raise HTTPException(status_code=e.status_code, detail=str(e.detail))
+    
+    except PlayerNotFoundException as e:
+        raise HTTPException(status_code=e.status_code, detail=str(e.detail))
+    
+
