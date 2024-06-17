@@ -19,6 +19,7 @@ from app.db import get_db_session
 from app.exceptions.transaction_not_found_exception import TransactionNotFoundException
 from app.exceptions.player_not_found_exception import PlayerNotFoundException
 from app.exceptions.invalid_bet_exception import InvalidBetException
+from app.exceptions.invalid_win_exception import InvalidWinException
 from app.exceptions.already_cancelled_exception import AlreadyCancelledException
 from fastapi import HTTPException
 import logging
@@ -42,7 +43,6 @@ player_service = get_player_service()
 def create_transaction(transaction: TransactionCreate, db: Session = Depends(get_db_session)):
     if transaction.value_bet < 0:
         raise InvalidBetException(value_bet=transaction.value_bet)
-
 
     transaction_service = get_transaction_service(db)
     player_service = get_player_service(db)
@@ -119,6 +119,9 @@ def delete_transaction(transaction_id: int, db: Session = Depends(get_db_session
 
 @router.post("/win", response_model=TransactionBalanceResponse, status_code=200)
 def win_transaction(transaction: TransactionWin, db: Session = Depends(get_db_session)):
+    if transaction.value_win < 0:
+        raise InvalidWinException(value_win=transaction.value_win)
+
     transaction_service = get_transaction_service(db)
     player_service = get_player_service(db)
 
@@ -149,6 +152,8 @@ def win_transaction(transaction: TransactionWin, db: Session = Depends(get_db_se
             balance=player_update.balance,
             txn_uuid=db_transaction.txn_uuid
         )
+    except InvalidWinException as e:
+        raise HTTPException(status_code=e.status_code, detail=str(e.detail))
     except PlayerNotFoundException as e:
         raise HTTPException(status_code=e.status_code, detail=str(e.detail))
     
