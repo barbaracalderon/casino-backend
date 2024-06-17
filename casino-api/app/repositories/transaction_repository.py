@@ -33,6 +33,7 @@ class TransactionRepository:
         db.commit()
         return db_transaction
     
+    
     def get_transaction_by_uuid(self, db: Session, txn_uuid: str) -> Transaction:
         return db.query(Transaction).filter(Transaction.txn_uuid == txn_uuid).first()
 
