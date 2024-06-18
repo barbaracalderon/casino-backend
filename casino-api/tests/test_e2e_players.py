@@ -89,3 +89,37 @@ def test_update_player(test_db):
     assert data["name"] == "Maria da Silva"
     assert data["balance"] == 1500
 
+def test_get_player_transaction_history(test_db):
+    client.post("/players", json={"name": "Maria da Silva", "balance": 1000})
+    client.post("/transactions/bet", json={"player_id": 1, "value_bet": 5, "txn_uuid": "abcd"})
+    client.post("/transactions/win", json={"player_id": 1, "value_win": 1000, "txn_uuid": "efgh"})
+    client.post("/transactions/rollback", json={"player_id": 1, "value_bet": 20, "txn_uuid": "ijkl"})
+
+    response = client.get("/players/1/history")
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["player"] == 1
+    assert len(data["history"]) == 3
+
+    assert data["history"][0]["txn_uuid"] == "abcd"
+    assert data["history"][0]["type"] == "bet"
+    assert data["history"][0]["value"] == 5
+    assert data["history"][0]["rolled_back"] is False
+
+    assert data["history"][1]["txn_uuid"] == "efgh"
+    assert data["history"][1]["type"] == "win"
+    assert data["history"][1]["value"] == 1000
+    assert data["history"][1]["rolled_back"] is False
+
+    assert data["history"][2]["txn_uuid"] == "ijkl"
+    assert data["history"][2]["type"] == "bet"
+    assert data["history"][2]["value"] == 20
+    assert data["history"][2]["rolled_back"] is True
+
+
+def test_get_player_transaction_history_player_not_found(test_db):
+    response = client.get("/players/999/history")
+
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Player with id 999 not found."}
