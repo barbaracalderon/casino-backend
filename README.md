@@ -153,11 +153,11 @@ pytest -v
 
 ## Considerações finais
 
-O projeto desenvolvido utilizando FastAPI, PostgreSQL, Poetry, Pytest e Docker representa uma solução para gerenciar transações e jogadores em um ambiente de cassino virtual. A escolha do FastAPI permitiu o desenvolvimento de uma API proveitando os recursos do Python moderno. O PostgreSQL foi utilizado para persistência de dados, garantindo integridade e confiabilidade nas operações de banco de dados.
+O projeto desenvolvido utilizando FastAPI, PostgreSQL, Poetry, Pytest e Docker representa uma solução para gerenciar transações e jogadores em um ambiente de cassino virtual. A escolha do FastAPI permitiu o desenvolvimento de uma API que aproveita os recursos do Python moderno. O PostgreSQL foi utilizado para persistência de dados, garantindo integridade e confiabilidade nas operações de banco de dados.
 
 O uso do Poetry simplificou a gestão de dependências, oferecendo um ambiente de desenvolvimento consistente e facilitando a manutenção do projeto. A implementação de testes de unidade, integração e ponta-a-ponta com o Pytest assegurou que a aplicação funcionasse conforme o esperado em diferentes cenários.
 
-A estrutura organizada em models, exceptions, routes, services, repositories e schemas visam proporcionar um código limpo, modular e de fácil manutenção. Além disso, a containerização com Docker e a orquestração via Docker Compose possibilita a portabilidade, facilitando a implantação em diferentes ambientes.
+A estrutura organizada em models, exceptions, routes, services, repositories e schemas visa proporcionar um código limpo, modular e de fácil manutenção. Além disso, a containerização com Docker e a orquestração via Docker Compose possibilita a portabilidade, facilitando a implantação em diferentes ambientes.
 
 Em resumo, este projeto lidou com construção de API REST com gestão de dependências e banco de dados, implementação de testes e buscou uma organização estrutural com legibilidade de código.
 
