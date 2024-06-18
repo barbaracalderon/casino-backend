@@ -62,3 +62,6 @@ class TransactionRepository:
             db.rollback()
             raise e
         return db_transaction
+
+    def get_transactions_by_player_id(self, db: Session, player_id: int):
+        return db.query(Transaction).filter(Transaction.player_id == player_id).all()
