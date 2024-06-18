@@ -116,7 +116,7 @@ localhost:3001
 localhost:3001/docs
 ```
 
-8. Para acessar o banco de dados no Pg4Admin, é preciso definir um server com nome do banco e dados, senha e endereço:porta:
+8. Para acessar o banco de dados no Pg4Admin (caso queira, mas não é necessário), é preciso definir um server com nome do banco e dados, senha e endereço:porta:
 
 ```bash
 banco de dados = 'casino'
