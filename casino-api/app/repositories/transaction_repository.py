@@ -52,6 +52,7 @@ class TransactionRepository:
     
     def create_transaction_marked_rolledback(self, db: Session, transaction: Transaction) -> Transaction:
         db_transaction = Transaction(**transaction.dict())
+        db_transaction.rolled_back = True
         try:
             db.commit()
             db.add(db_transaction)

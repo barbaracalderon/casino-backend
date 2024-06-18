@@ -180,7 +180,7 @@ def rollback_transaction(transaction: TransactionCancelled, db: Session = Depend
         player_id = db_player.id
 
         player_service.update_player(db=db, player_id=player_id, player=player_update)
-        transaction_service.mark_transaction_rolled_back(db, transaction.txn_uuid)
+        transaction_service.mark_transaction_rolled_back(db=db, txn_uuid=existing_transaction.txn_uuid)
 
         return TransactionBalanceUpdate(
             player_id=player_id,
@@ -197,30 +197,3 @@ def rollback_transaction(transaction: TransactionCancelled, db: Session = Depend
     except PlayerNotFoundException as e:
         raise HTTPException(status_code=e.status_code, detail=str(e.detail))
     
-
-@router.get("/{player_id}/history")
-def get_player_transaction_history(player_id: int, db: Session = Depends(get_db_session)):
-    transaction_service = get_transaction_service(db)
-    player_service = get_player_service(db)
-    
-    try:
-        player_service.get_player(db=db, player_id=player_id)
-        transactions_by_player_id = transaction_service.get_transactions_by_player_id(db=db, player_id=player_id)
-        
-        history = []
-        for transaction in transactions_by_player_id:
-            history.append({
-                "txn_uuid": transaction.txn_uuid,
-                "type": "bet" if transaction.value_bet > 0 and transaction.value_win == 0 else "win",
-                "value": transaction.value_bet if transaction.value_bet > 0 and transaction.value_win == 0 else transaction.value_win,
-                "rolled_back": transaction.rolled_back if transaction.value_bet > 0 and transaction.value_win == 0 else False
-            })
-        
-        return {
-            "player": player_id,
-            "history": history
-        }
-    except PlayerNotFoundException as e:
-        raise HTTPException(status_code=e.status_code, detail=str(e.detail))
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Internal Server Error")
