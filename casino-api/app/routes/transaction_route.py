@@ -40,7 +40,7 @@ player_service = get_player_service()
 
 @router.post("/bet", response_model=TransactionBalanceResponse, status_code=200)
 def create_transaction(transaction: TransactionCreate, db: Session = Depends(get_db_session)):
-    if transaction.value_bet < 0:
+    if transaction.value_bet <= 0:
         raise InvalidBetException(value_bet=transaction.value_bet)
 
     transaction_service = get_transaction_service(db)
@@ -118,7 +118,7 @@ def delete_transaction(transaction_id: int, db: Session = Depends(get_db_session
 
 @router.post("/win", response_model=TransactionBalanceResponse, status_code=200)
 def win_transaction(transaction: TransactionWin, db: Session = Depends(get_db_session)):
-    if transaction.value_win < 0:
+    if transaction.value_win <= 0:
         raise InvalidWinException(value_win=transaction.value_win)
 
     transaction_service = get_transaction_service(db)
