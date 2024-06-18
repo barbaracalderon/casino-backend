@@ -91,6 +91,10 @@ cd casino-backend/
  mkdir postgresql-data
  ```
 
+The structure should look like this:
+
+![Directories structure](structure.png)
+
 5. Execute Docker Compose to bring up the containers:
 
 ```bash
