@@ -86,7 +86,13 @@ git clone git@github.com:barbaracalderon/casino-backend.git
 cd casino-backend/
 ```
 
-4. Execute o Docker Compose para subir os contêineres:
+4. Crie o diretório postgresql-data para automaticamente sincronizar dados do contêiner postgresql:
+
+ ```bash
+ mkdir postgresql-data
+ ```
+
+5. Execute o Docker Compose para subir os contêineres:
 
 ```bash
 docker-compose up --build
@@ -94,19 +100,19 @@ docker-compose up --build
 
 _Caso encontre problemas com o comando acima, talvez seja necessário usar `sudo docker-compose up --build`_
 
-5. No navegador, o serviço casino-api está disponível no endereço:
+6. No navegador, o serviço casino-api está disponível no endereço:
 
 ```bash
 localhost:3001
 ```
 
-6. Para acessar a documentação Swagger da OpenAPI:
+7. Para acessar a documentação Swagger da OpenAPI:
 
 ```bash
 localhost:3001/docs
 ```
 
-7. Para acessar o banco de dados no Pg4Admin, é preciso definir um server com nome do banco e dados, senha e endereço:porta:
+8. Para acessar o banco de dados no Pg4Admin, é preciso definir um server com nome do banco e dados, senha e endereço:porta:
 
 ```bash
 banco de dados = 'casino'
