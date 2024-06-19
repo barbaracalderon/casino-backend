@@ -85,17 +85,7 @@ git clone git@github.com:barbaracalderon/casino-backend.git
 cd casino-backend/
 ```
 
-4. Create the postgresql-data directory to automatically synchronize data from postgresql container:
-
- ```bash
- mkdir postgresql-data
- ```
-
-The structure should look like this:
-
-![Directories structure](structure.png)
-
-5. Execute Docker Compose to bring up the containers:
+4. Execute Docker Compose to bring up the containers:
 
 ```bash
 docker-compose up --build
@@ -103,19 +93,19 @@ docker-compose up --build
 
 _If you encounter issues with the above command, you may need to use `sudo docker-compose up --build`_
 
-6. In the browser, the casino-api service is available at:
+5. In the browser, the casino-api service is available at:
 
 ```bash
 localhost:3001
 ```
 
-7. PTo access the OpenAPI Swagger documentation:
+6. PTo access the OpenAPI Swagger documentation:
 
 ```bash
 localhost:3001/docs
 ```
 
-8. To access the database in Pg4Admin (if you wish), you need to define a server with database name, password, and address:port.
+7. To access the database in Pg4Admin (if you wish), you need to define a server with database name, password, and address:port.
 
 ```bash
 database = 'casino'
@@ -134,8 +124,10 @@ cd casino-backend/casino-api
 2. Run the test command:
 
 ```bash
-pytest -v
+docker exec -it casino-api pytest
 ```
+
+Those are 48 successfull tests.
 
 ![Testes with Pytest](tests.png)
 
@@ -170,5 +162,7 @@ The use of Poetry simplified dependency management, offering a consistent develo
 The structured organization in models, exceptions, routes, services, repositories, and schemas aims to provide clean, modular, and maintainable code. Additionally, containerization with Docker and orchestration via Docker Compose enables portability, facilitating deployment in different environments.
 
 In summary, this project dealt with building a REST API with dependency management and database management, implementing tests, and sought structural organization with code readability.
+
+Regards,
 
 Barbara Calderon.

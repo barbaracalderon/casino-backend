@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from app.routes.player_route import router as player_router 
 from app.routes.balance_route import router as balance_router
 from app.routes.transaction_route import router as transaction_router
-from app.exceptions.player_not_found_exception import PlayerNotFoundException
+from fastapi.responses import RedirectResponse
 
 
 app = FastAPI(
@@ -19,6 +19,10 @@ app = FastAPI(
         "url": "https://opensource.org/licenses/MIT",
     },
 )
+
+@app.get("/", include_in_schema=False)
+async def root():
+    return RedirectResponse(url="/docs")
 
 
 app.include_router(player_router, prefix="/players", tags=["players"])

@@ -89,10 +89,10 @@ cd casino-backend/
 4. Execute o Docker Compose para subir os contêineres:
 
 ```bash
-docker compose up --build --force-recreate --no-deps
+docker compose up --build
 ```
 
-_Caso encontre problemas com o comando acima, talvez seja necessário usar `docker compose up --build --force-recreate --no-deps`_
+_Caso encontre problemas com o comando acima, talvez seja necessário usar `sudo docker compose up --build`_
 
 5. No navegador, o serviço casino-api está disponível no endereço:
 
@@ -162,5 +162,7 @@ O uso do Poetry simplificou a gestão de dependências, oferecendo um ambiente d
 A estrutura organizada em models, exceptions, routes, services, repositories e schemas visa proporcionar um código limpo, modular e de fácil manutenção. Além disso, a containerização com Docker e a orquestração via Docker Compose possibilita a portabilidade, facilitando a implantação em diferentes ambientes.
 
 Em resumo, este projeto lidou com construção de API REST com gestão de dependências e banco de dados, implementação de testes e buscou uma organização estrutural com legibilidade de código.
+
+Cordialmente,
 
 Barbara Calderon.
