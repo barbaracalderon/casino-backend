@@ -8,7 +8,7 @@ Foi desenvolvido em Python usando o framework FastAPI e banco de dados PostgreSQ
 
 Ele inclui testes de ponta-a-ponta (e2e), testes de integração e testes unitários para garantir a robustez e a qualidade do código. Os testes foram desenvolvidos utilizando o Pytest. Além disso, este projeto utiliza Docker Compose para orquestrar dois serviços conteinirizados: casino-api (`localhost:3001`) e postgresql-data (`localhost:5433`) e senha `example` para acesso.
 
-![Casino API](casino-api.png)
+![Casino API](/assets/casino-api.png)
 
 Os objetivos desse projeto são:
 
@@ -86,17 +86,7 @@ git clone git@github.com:barbaracalderon/casino-backend.git
 cd casino-backend/
 ```
 
-4. Crie o diretório postgresql-data para automaticamente sincronizar dados do contêiner postgresql:
-
- ```bash
- mkdir postgresql-data
- ```
-
-A estrutura deve ficar assim:
-
- ![Estrutura de diretórios](structure.png)
-
-5. Execute o Docker Compose para subir os contêineres:
+4. Execute o Docker Compose para subir os contêineres:
 
 ```bash
 docker-compose up --build
@@ -104,19 +94,19 @@ docker-compose up --build
 
 _Caso encontre problemas com o comando acima, talvez seja necessário usar `sudo docker-compose up --build`_
 
-6. No navegador, o serviço casino-api está disponível no endereço:
+5. No navegador, o serviço casino-api está disponível no endereço:
 
 ```bash
 localhost:3001
 ```
 
-7. Para acessar a documentação Swagger da OpenAPI:
+6. Para acessar a documentação Swagger da OpenAPI:
 
 ```bash
 localhost:3001/docs
 ```
 
-8. Para acessar o banco de dados no Pg4Admin (caso queira, mas não é necessário), é preciso definir um server com nome do banco e dados, senha e endereço:porta:
+7. Para acessar o banco de dados no Pg4Admin (caso queira, mas não é necessário), as credenciais são:
 
 ```bash
 banco de dados = 'casino'
@@ -137,8 +127,9 @@ cd casino-backend/casino-api
 ```bash
 pytest -v
 ```
+São 48 testes com sucesso.
 
-![Testes with Pytest](tests.png)
+![Testes with Pytest](/assets/tests.png)
 
 
 ## Endpoints da aplicação
