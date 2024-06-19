@@ -89,10 +89,10 @@ cd casino-backend/
 4. Execute o Docker Compose para subir os contêineres:
 
 ```bash
-docker-compose up --build
+docker compose up --build --force-recreate --no-deps
 ```
 
-_Caso encontre problemas com o comando acima, talvez seja necessário usar `sudo docker-compose up --build`_
+_Caso encontre problemas com o comando acima, talvez seja necessário usar `docker compose up --build --force-recreate --no-deps`_
 
 5. No navegador, o serviço casino-api está disponível no endereço:
 
@@ -125,8 +125,9 @@ cd casino-backend/casino-api
 2. Execute o comando de teste:
 
 ```bash
-pytest -v
+docker exec -it casino-api pytest
 ```
+
 São 48 testes com sucesso.
 
 ![Testes with Pytest](/assets/tests.png)

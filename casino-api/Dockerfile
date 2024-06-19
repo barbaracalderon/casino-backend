@@ -23,9 +23,9 @@ RUN apt-get update \
 
 WORKDIR /code
 
-RUN rm -rf .venv
+RUN rm -rf /code/casino-api/.venv
 
-RUN curl -sSL https://install.python-poetry.org | python3 -
+RUN curl -sSL https://install.python-poetry.org/ | python3 -
 
 RUN ln -s $HOME/.local/bin/poetry /usr/bin/poetry
 
