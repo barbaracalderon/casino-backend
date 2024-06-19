@@ -1,17 +1,21 @@
 services:
+
+  postgresql-data:
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: casino
+    ports:
+      - 5433:5432
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data  
+      - ./initdb:/docker-entrypoint-initdb.d
+
   casino-api:
     build: ./casino-api
     ports: 
       - 3001:8000
     volumes:
       - .:/code
-
-  postgresql-data:
-    image: postgres:14-alpine
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: example
-    ports:
-      - 5433:5432
-    volumes:
-      - ./postgresql-data:/var/lib/postgresql/data
