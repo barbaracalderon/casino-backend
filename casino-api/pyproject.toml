@@ -12,6 +12,7 @@ pydantic = "^2.7.4"
 psycopg2-binary = "^2.9.9"
 sqlalchemy = "^2.0.30"
 asyncpg = "^0.29.0"
+pytest = "^8.2.2"
 
 
 [build-system]
