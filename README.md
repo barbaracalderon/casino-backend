@@ -1,4 +1,4 @@
-_(Portuguese version | [Click here for the English version.](https://github.com/barbaracalderon/casino-backend/blob/main/README-en.md))_
+_(Portuguese version | [Click here for the English version.](https://github.com/barbaracalderon/casino-backend/blob/main/assets/README-en.md))_
 
 # The Casino REST API
 
