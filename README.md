@@ -7,13 +7,12 @@ This project is a REST API that simulates services for casino users.
 
 It was developed in Python using the FastAPI framework and PostgreSQL database and includes end-to-end (e2e), integration, and unit tests to ensure code robustness and quality. Tests were developed using Pytest. Additionally, this project uses Docker Compose to orchestrate two containerized services: casino-api (`localhost:3001`) and postgresql-data (`localhost:5433`) with password `example` for access.
 
-- **Current Version: `1.2.0`
+- **Current Version**: `1.2.0`
 - **Released on**: `January 2025`
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-
-![Casino API](casino-api.png)
+![Casino API](assets/casino-api.png)
 
 The objectives of this project are:
 
