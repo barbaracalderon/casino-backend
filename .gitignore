@@ -1,2 +1,4 @@
 *pycache*
 .pytest_cache
+.*
+test.db

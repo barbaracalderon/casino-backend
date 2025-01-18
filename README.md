@@ -1,168 +1,181 @@
-_(Portuguese version | [Click here for the English version.](https://github.com/barbaracalderon/casino-backend/blob/main/assets/README-en.md))_
+_(English version | [Click here for the Portuguese version.](https://github.com/barbaracalderon/casino-backend/blob/main/assets/README-pt.md))_
+
 
 # The Casino REST API
 
-Este projeto é uma API REST que simula serviços para usuários cassinos. 
+This project is a REST API that simulates services for casino users.
 
-Foi desenvolvido em Python usando o framework FastAPI e banco de dados PostgreSQL. 
+It was developed in Python using the FastAPI framework and PostgreSQL database and includes end-to-end (e2e), integration, and unit tests to ensure code robustness and quality. Tests were developed using Pytest. Additionally, this project uses Docker Compose to orchestrate two containerized services: casino-api (`localhost:3001`) and postgresql-data (`localhost:5433`) with password `example` for access.
 
-Ele inclui testes de ponta-a-ponta (e2e), testes de integração e testes unitários para garantir a robustez e a qualidade do código. Os testes foram desenvolvidos utilizando o Pytest. Além disso, este projeto utiliza Docker Compose para orquestrar dois serviços conteinirizados: casino-api (`localhost:3001`) e postgresql-data (`localhost:5433`) e senha `example` para acesso.
+- **Current Version: `1.2.0`
+- **Released on**: `January 2025`
 
-![Casino API](/assets/casino-api.png)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-Os objetivos desse projeto são:
 
-- Ter código publicado para acesso geral na plataforma Github
-- Utilizar `commit patterns`
-- Uso do framework FastAPI para o desenvolvimento da aplicação backend
-- Uso do Pytest para desenvolvimento de testes ponta-a-ponta, integração e unitários
-- Respostas das requisições à API devem ser no formato JSON
-- Aplicação em contêineres com uso de Docker e Docker Compose para orquestração
-- API documentada com padrão Swagger da OpenAPI (`localhost:3001/docs`)
-- Definição dos endpoints gerais `/players`, `/balance`, `/bet`, `/win`, `/rollback` e `/history` e suas respectivas especificidades
-- Validação de valores não-negativos
-- Validação de existência de jogador
-- Persistência de dados com banco de dados relacional PostgreSQL
-- Estruturação e legibilidade de código: estrutura desenvolvida com `models`, `schemas`, `routes`, `services`, `repositories` e `exceptions`
+![Casino API](casino-api.png)
 
-## Autor
-Barbara Calderon, desenvolvedora de software.
+The objectives of this project are:
+
+- Have code published for general access on the Github platform
+- Use of `commit patterns`
+- Use of the FastAPI framework for backend application development
+- Use of Pytest for end-to-end, integration, and unit test development
+- API responses to be in JSON format
+- Application containerization using Docker and Docker Compose for orchestration
+- API documented with OpenAPI Swagger standard (`localhost:3001/docs`)
+- Definition of general endpoints `/players`, `/balance`, `/bet`, `/win`, `/rollback`, and `/history` and their respective specifics
+- Validation of non-negative values
+- Validation of player existence
+- Data persistence with PostgreSQL relational database
+- Code structure and readability: structure developed with `models`, `schemas`, `routes`, `services`, `repositories`, and `exceptions`
+
+## Author
+Barbara Calderon, software developer.
 
 - [Github](https://www.github.com/barbaracalderon)
-- [LinkedIn](https://www.linkedin.com/in/barbaracalderondev)
+- [LinkedIn](https://www.linkedin.com/in/barbaracalderondev/?locale=en_US)
 - [Twitter](https://www.x.com/bederoni)
 
-## índice
-1. [Tecnologias utilizadas](#tecnologias-utilizadas)
-2. [Estrutura do Projeto](#estrutura-do-projeto)
-3. [Executar localmente com Docker Compose](#executando-localmente-com-docker-compose)
-4. [Executar testes com Pytest](#executando-testes-com-pytest)
-5. [Endpoints da aplicação Casino API](#endpoints-da-aplicação-casino-api)
+## Table of Contents
+1. [Technologies Used](#technologies-used)
+2. [Project Structure](#project-structure)
+3. [Running Locally with Docker Compose](#running-locally-with-docker-compose)
+4. [Running Tests with Pytest](#running-tests-with-pytest)
+5. [Application Endpoints Casino API](#application-endpoints-casino-api)
 
+## Technologies Used
 
-## Tecnologias utilizadas
-
-- **Linguagem**: Python
+- **Language**: Python
 - **Framework**: FastAPI
-- **Banco de dados**: PostgreSQL
-- **Gerenciamento**: Poetry
-- **Dependências principais**:
-    - **Pydantic**: Utilizado para a validação e serialização de dados.
-    - **Psycopg-binary**: Driver para comunicação com o banco de dados PostgreSQL.
-    - **SQLAlchemy**: ORM (Object-Relational Mapping) para interagir com o banco de dados de maneira mais intuitiva.
-    - **Asyncpg**: Driver assíncrono para PostgreSQL, utilizado para operações de banco de dados assíncronas.
-    - **Pytest**: Framework de testes utilizado para escrever e executar testes.
+- **Database**: PostgreSQL
+- **Management**: Poetry
+- **Main Dependencies**:
+    - **Pydantic**: Used for data validation and serialization.
+    - **Psycopg-binary**: Driver for communication with PostgreSQL database.
+    - **SQLAlchemy**: ORM (Object-Relational Mapping) to interact with the database more intuitively.
+    - **Asyncpg**: Asynchronous driver for PostgreSQL, used for asynchronous database operations.
+    - **Pytest**: Testing framework used to write and execute tests.
 
-## Estrutura do Projeto
+## Project Structure
 
-O projeto está conteinerizado em dois serviços principais:
-- **casino-api**: contém o aplicativo FastAPI (`app/`) e os testes (`tests/`).
-- **postgresql-data**: contém os dados persistidos no banco de dados PostgreSQL.
+The project is containerized into two main services:
+- **casino-api**: contains the FastAPI application (`app/`) and tests (`tests/`).
+- **postgresql-data**: contains the persisted data in PostgreSQL database.
 
 ### Dockerfile
-O diretório `casino-api` possui um `Dockerfile` para criar a imagem Docker do aplicativo.
+The `casino-api` directory has a `Dockerfile` to create the Docker image of the application.
 
 ### Docker Compose
-O projeto utiliza o `docker-compose.yml` para orquestrar os contêineres `casino-api` e `postgresql-data`.
+The project uses `docker-compose.yml` to orchestrate the `casino-api` and `postgresql-data` containers.
 
-### Dependências
-O projeto foi desenvolvido utilizando o `poetry`, que gerencia as dependências e também o `pytest` para os testes.
+### Dependencies
+The project was developed using `poetry`, which manages dependencies, and also `pytest` for testing.
 
-## Executar localmente com Docker Compose
+## Running Locally with Docker Compose
 
-Para rodar o projeto localmente, siga os passos abaixo:
+To run the project locally, follow these steps:
 
-1. Tenha o Docker e o Docker Compose instalados na sua máquina.
+1. Have Docker and Docker Compose installed on your machine.
 
-2. Clone o repositório:
+2. Clone the repository:
 
 ```bash
 git clone git@github.com:barbaracalderon/casino-backend.git
 ```
 
-3. Navege até o diretório do projeto:
+3. Navigate to the project directory:
 
 ```bash
 cd casino-backend/
 ```
 
-4. Execute o Docker Compose para subir os contêineres:
+4. Execute Docker Compose to bring up the containers:
 
 ```bash
-docker compose up --build
+docker-compose up --build
 ```
 
-_Caso encontre problemas com o comando acima, talvez seja necessário usar `sudo docker compose up --build`_
+_If you encounter issues with the above command, you may need to use `sudo docker-compose up --build`_
 
-5. No navegador, o serviço casino-api está disponível no endereço:
+5. In the browser, the casino-api service is available at:
 
 ```bash
 localhost:3001
 ```
 
-6. Para acessar a documentação Swagger da OpenAPI:
+6. PTo access the OpenAPI Swagger documentation:
 
 ```bash
 localhost:3001/docs
 ```
 
-7. Para acessar o banco de dados no Pg4Admin (caso queira, mas não é necessário), as credenciais são:
+7. To access the database in Pg4Admin (if you wish), you need to define a server with database name, password, and address:port.
 
 ```bash
-banco de dados = 'casino'
-senha = 'example'
+database = 'casino'
+password = 'example'
 localhost:5433
 ```
 
-## Executando testes com Pytest
+## Running Tests with Pytest
 
-1. Para executar testes, navegue até o diretório:
+1. To run tests, navigate to the directory:
 
 ```bash
 cd casino-backend/casino-api
 ```
 
-2. Execute o comando de teste:
+2. Run the test command:
 
 ```bash
 docker exec -it casino-api pytest
 ```
 
-São 48 testes com sucesso.
+Those are 48 successfull tests.
 
-![Testes with Pytest](/assets/tests.png)
-
-
-## Endpoints da aplicação
+![Testes with Pytest](tests.png)
 
 
-| Método HTTP | Endpoint                    | Descrição                                                    |
+## Application Endpoints
+
+
+| HTTP Method | Endpoint                    | Description                                                  |
 |-------------|-----------------------------|--------------------------------------------------------------|
-| POST        | /players                    | Cria um novo jogador.                                        |
-| GET         | /players                    | Retorna a lista de jogadores.                                |
-| GET         | /players/{player_id}        | Retorna os detalhes de um jogador específico.                |
-| DELETE      | /players/{player_id}        | Deleta um jogador específico.                                |
-| PUT         | /players/{player_id}        | Atualiza as informações de um jogador específico.            |
-| GET         | /players/{player_id}/history | Retorna o histórico de transações de um jogador específico. |
-| GET         | /balance                    | Retorna o saldo de um jogador específico.                    |
-| POST        | /transactions/bet           | Cria uma nova aposta.                                        |
-| GET         | /transactions               | Retorna a lista de transações.                               |
-| GET         | /transactions/{txn_uuid}    | Retorna os detalhes de uma transação específica.             |
-| DELETE      | /transactions/{transaction_id} | Deleta uma transação específica.                          |
-| POST        | /transactions/win           | Registra um ganho para um balance.                           |
-| POST        | /transactions/rollback      | Realiza o rollback de uma transação.                         |
+| POST        | /players                    | Creates a new player.                                         |
+| GET         | /players                    | Retrieves the list of players.                                |
+| GET         | /players/{player_id}        | Retrieves details of a specific player.                       |
+| DELETE      | /players/{player_id}        | Deletes a specific player.                                    |
+| PUT         | /players/{player_id}        | Updates information of a specific player.                     |
+| GET         | /players/{player_id}/history | Retrieves transaction history of a specific player.          |
+| GET         | /balance                    | Retrieves the balance of a specific player.                   |
+| POST        | /transactions/bet           | Creates a new bet.                                            |
+| GET         | /transactions               | Retrieves the list of transactions.                           |
+| GET         | /transactions/{txn_uuid}    | Retrieves details of a specific transaction.                  |
+| DELETE      | /transactions/{transaction_id} | Deletes a specific transaction.                            |
+| POST        | /transactions/win           | Registers a win for a balance.                                |
+| POST        | /transactions/rollback      | Performs a rollback of a transaction.                         |
 
 
-## Considerações finais
 
-O projeto desenvolvido utilizando FastAPI, PostgreSQL, Poetry, Pytest e Docker representa uma solução para gerenciar transações e jogadores em um ambiente de cassino virtual. A escolha do FastAPI permitiu o desenvolvimento de uma API que aproveita os recursos do Python moderno. O PostgreSQL foi utilizado para persistência de dados, garantindo integridade e confiabilidade nas operações de banco de dados.
+## Final remarks
 
-O uso do Poetry simplificou a gestão de dependências, oferecendo um ambiente de desenvolvimento consistente e facilitando a manutenção do projeto. A implementação de testes de unidade, integração e ponta-a-ponta com o Pytest assegurou que a aplicação funcionasse conforme o esperado em diferentes cenários.
+The project developed using FastAPI, PostgreSQL, Poetry, Pytest, and Docker represents a solution for managing transactions and players in a virtual casino environment. Choosing FastAPI enabled the development of an API leveraging modern Python features. PostgreSQL was used for data persistence, ensuring integrity and reliability in database operations.
 
-A estrutura organizada em models, exceptions, routes, services, repositories e schemas visa proporcionar um código limpo, modular e de fácil manutenção. Além disso, a containerização com Docker e a orquestração via Docker Compose possibilita a portabilidade, facilitando a implantação em diferentes ambientes.
+The use of Poetry simplified dependency management, offering a consistent development environment and facilitating project maintenance. Implementation of unit, integration, and end-to-end tests with Pytest ensured the application functioned as expected across different scenarios.
 
-Em resumo, este projeto lidou com construção de API REST com gestão de dependências e banco de dados, implementação de testes e buscou uma organização estrutural com legibilidade de código.
+The structured organization in models, exceptions, routes, services, repositories, and schemas aims to provide clean, modular, and maintainable code. Additionally, containerization with Docker and orchestration via Docker Compose enables portability, facilitating deployment in different environments.
 
-Cordialmente,
+In summary, this project dealt with building a REST API with dependency management and database management, implementing tests, and sought structural organization with code readability.
+
+Regards,
 
 Barbara Calderon.
+
+## Version History
+
+| Version | Date       | Description                                      |
+|---------|------------|--------------------------------------------------|
+| 1.2.0   | Jan 2025   | Upgraded dependencies. Added hidden files to .gitignore. Updated README.md files in portuguese and english.|
+| 1.1.0   | Jun 2024   | Bug fix on tests. Addition of README.md files in English and Portuguese.       |
+| 1.0.0   | Jun 2024   | Initial release of the Casino Rest API.                |
